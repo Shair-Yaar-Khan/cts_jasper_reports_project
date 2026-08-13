@@ -1,6 +1,9 @@
 package com.iispl.reporting;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -11,13 +14,22 @@ public class JasperReportRunner {
 	public void generateDailyChequeReport() {
 		Connection connection = null;
 		
-			connection = DBConnection.getConnection();
+			try {
+				connection = DBConnection.getConnection();
+				
+				JasperReport jasperReport = JasperCompileManager.compileReport("reports/daily_cheque_report.jrxml");
+				
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,connection);
+				
+				JasperExportManager.exportReportToPdfFile(jasperPrint, "output/daily_cheque_report.pdf");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}catch(JRException e) {
+				e.printStackTrace();
+			}
 			
-			JasperReport jasperReport = JasperCompileManager.compileReport("reports/daily_cheque_report.jrxml");
 			
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,connection);
-			
-			JasperExportManager.exportReportToPdfFile(jasperPrint, "output/daily_cheque_report.pdf");
   }
 	public void generateBatchSummaryReport() throws Exception {
 
