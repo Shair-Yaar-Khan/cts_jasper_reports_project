@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jasperReport
+    name="bank_summary_report"
+    language="java"
+    pageWidth="595"
+    pageHeight="842"
+    columnWidth="555"
+    leftMargin="20"
+    rightMargin="20"
+    topMargin="20"
+    bottomMargin="20">
+
+    <!-- ================================================= -->
+    <!-- SQL QUERY                                         -->
+    <!-- ================================================= -->
+
+    <query language="SQL">
+        <![CDATA[
+            SELECT
+                bank_name,
+                COUNT(*) AS total_cheques,
+                SUM(cheque_amount) AS total_amount
+            FROM cheque_transaction
+            GROUP BY bank_name
+            ORDER BY total_amount DESC
+        ]]>
+    </query>
+
+
+    <!-- ================================================= -->
+    <!-- FIELDS                                            -->
+    <!-- ================================================= -->
+
+    <field
+        name="bank_name"
+        class="java.lang.String"/>
+
+    <field
+        name="total_cheques"
+        class="java.lang.Long"/>
+
+    <field
+        name="total_amount"
+        class="java.lang.Double"/>
+
+
+    <!-- ================================================= -->
+    <!-- TITLE                                             -->
+    <!-- ================================================= -->
+
+    <title height="60">
+
+        <element
+            kind="staticText"
+            x="0"
+            y="10"
+            width="555"
+            height="30"
+            hTextAlign="Center"
+            fontSize="18.0"
+            bold="true">
+
+            <text><![CDATA[BANK-WISE PROCESSING SUMMARY]]></text>
+
+        </element>
+
+    </title>
+
+
+    <!-- ================================================= -->
+    <!-- COLUMN HEADER                                     -->
+    <!-- ================================================= -->
+
+    <columnHeader height="35">
+
+        <element
+            kind="staticText"
+            x="0"
+            y="0"
+            width="185"
+            height="30"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[Bank]]></text>
+
+        </element>
+
+
+        <element
+            kind="staticText"
+            x="185"
+            y="0"
+            width="185"
+            height="30"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[Total Cheques]]></text>
+
+        </element>
+
+
+        <element
+            kind="staticText"
+            x="370"
+            y="0"
+            width="185"
+            height="30"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[Total Amount]]></text>
+
+        </element>
+
+    </columnHeader>
+
+
+    <!-- ================================================= -->
+    <!-- DETAIL                                            -->
+    <!-- ================================================= -->
+
+    <detail>
+
+        <band height="30">
+
+            <!-- BANK -->
+
+            <element
+                kind="textField"
+                x="0"
+                y="0"
+                width="185"
+                height="25"
+                hTextAlign="Center">
+
+                <expression>
+                    <![CDATA[$F{bank_name}]]>
+                </expression>
+
+            </element>
+
+
+            <!-- TOTAL CHEQUES -->
+
+            <element
+                kind="textField"
+                x="185"
+                y="0"
+                width="185"
+                height="25"
+                hTextAlign="Center">
+
+                <expression>
+                    <![CDATA[$F{total_cheques}]]>
+                </expression>
+
+            </element>
+
+
+            <!-- TOTAL AMOUNT -->
+
+            <element
+                kind="textField"
+                x="370"
+                y="0"
+                width="185"
+                height="25"
+                hTextAlign="Right">
+
+                <expression>
+                    <![CDATA[$F{total_amount}]]>
+                </expression>
+
+                <patternExpression>
+                    <![CDATA["#,##0.00"]]>
+                </patternExpression>
+
+            </element>
+
+        </band>
+
+    </detail>
+
+
+    <!-- ================================================= -->
+    <!-- SUMMARY                                           -->
+    <!-- ================================================= -->
+
+    <summary height="330">
+
+        <!-- CHART TITLE -->
+
+        <element
+            kind="staticText"
+            x="0"
+            y="5"
+            width="555"
+            height="25"
+            hTextAlign="Center"
+            fontSize="14.0"
+            bold="true">
+
+            <text><![CDATA[BANK VS TOTAL CHEQUE AMOUNT]]></text>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- BAR CHART                                           -->
+        <!-- ================================================= -->
+
+        <element
+            kind="chart"
+            chartType="bar"
+            x="25"
+            y="40"
+            width="505"
+            height="270"
+            evaluationTime="Report">
+
+
+            <!-- CATEGORY DATASET -->
+
+            <dataset
+                kind="category"
+                resetType="Report">
+
+                <series>
+
+                    <seriesExpression>
+                        <![CDATA["Total Amount"]]>
+                    </seriesExpression>
+
+                    <categoryExpression>
+                        <![CDATA[$F{bank_name}]]>
+                    </categoryExpression>
+
+                    <valueExpression>
+                        <![CDATA[$F{total_amount}]]>
+                    </valueExpression>
+
+                </series>
+
+            </dataset>
+
+
+            <!-- BAR PLOT -->
+
+            <plot>
+
+                <categoryAxisLabelExpression>
+                    <![CDATA["Bank"]]>
+                </categoryAxisLabelExpression>
+
+                <valueAxisLabelExpression>
+                    <![CDATA["Total Cheque Amount"]]>
+                </valueAxisLabelExpression>
+
+            </plot>
+
+        </element>
+
+    </summary>
+
+
+    <!-- ================================================= -->
+    <!-- PAGE FOOTER                                       -->
+    <!-- ================================================= -->
+
+    <pageFooter height="30">
+
+        <element
+            kind="textField"
+            x="430"
+            y="5"
+            width="125"
+            height="20"
+            hTextAlign="Right">
+
+            <expression>
+                <![CDATA["Page " + $V{PAGE_NUMBER}]]>
+            </expression>
+
+        </element>
+
+    </pageFooter>
+
+
+</jasperReport>
