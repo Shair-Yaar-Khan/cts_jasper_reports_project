@@ -8,7 +8,17 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
 public class JasperReportRunner {
-
+	public void generateDailyChequeReport() {
+		Connection connection = null;
+		
+			connection = DBConnection.getConnection();
+			
+			JasperReport jasperReport = JasperCompileManager.compileReport("reports/daily_cheque_report.jrxml");
+			
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,connection);
+			
+			JasperExportManager.exportReportToPdfFile(jasperPrint, "output/daily_cheque_report.pdf");
+  }
 	public void generateBatchSummaryReport() throws Exception {
 
 	    String inputFile = "reports/batch_summary_report.jrxml";
