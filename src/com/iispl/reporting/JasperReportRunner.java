@@ -1,7 +1,6 @@
 package com.iispl.reporting;
 
 import java.sql.Connection;
-
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -11,7 +10,7 @@ import net.sf.jasperreports.engine.JasperReport;
 public class JasperReportRunner {
 	public void generateDailyChequeReport() {
 		Connection connection = null;
-		try {
+		
 			connection = DBConnection.getConnection();
 			
 			JasperReport jasperReport = JasperCompileManager.compileReport("reports/daily_cheque_report.jrxml");
@@ -19,18 +18,35 @@ public class JasperReportRunner {
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,connection);
 			
 			JasperExportManager.exportReportToPdfFile(jasperPrint, "output/daily_cheque_report.pdf");
+  }
+	public void generateBatchSummaryReport() throws Exception {
 
-            System.out.println("Daily cheque report generated successfully.");
- } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        	if (connection != null) {
-                try {
-                    connection.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+	    String inputFile = "reports/batch_summary_report.jrxml";
+
+	    JasperReport jasperReport = JasperCompileManager.compileReport(inputFile);
+
+	    Connection connection = DBConnection.getConnection();
+
+	    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,connection);
+
+	    JasperExportManager.exportReportToPdfFile(jasperPrint,"output/batch_summary_report.pdf");
+
+	    System.out.println("Batch Summary Report generated successfully.");
+	}
+	
+	public static void generateBankSummaryReport() throws Exception {
+
+	    String inputFile = "reports/bank_summary_report.jrxml";
+
+	    JasperReport jasperReport = JasperCompileManager.compileReport(inputFile);
+
+	    Connection connection = DBConnection.getConnection();
+
+	    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,connection);
+
+	    JasperExportManager.exportReportToPdfFile(jasperPrint,"output/bank_summary_report.pdf");
+
+	    System.out.println("Bank Summary Report generated successfully.");
+	    
 	}
 }
