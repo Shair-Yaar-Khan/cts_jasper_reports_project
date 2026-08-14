@@ -1,194 +1,381 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <jasperReport
-    xmlns="http://jasperreports.sourceforge.net/jasperreports"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="
-        http://jasperreports.sourceforge.net/jasperreports
-        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-    name="RejectedChequeReport"
+    name="high_value_report"
     language="java"
     pageWidth="595"
     pageHeight="842"
-    columnWidth="555"
-    leftMargin="20"
-    rightMargin="20"
-    topMargin="20"
-    bottomMargin="20">
+    columnWidth="515"
+    leftMargin="40"
+    rightMargin="40"
+    topMargin="40"
+    bottomMargin="40">
 
-    <parameter
-        name="P_STATUS"
-        class="java.lang.String"/>
+    <!-- ========================= -->
+    <!-- QUERY                     -->
+    <!-- ========================= -->
 
-    <query language="sql">
+    <query language="SQL">
         <![CDATA[
             SELECT
                 cheque_number,
                 customer_name,
-                account_number,
+                bank_name,
                 cheque_amount,
-                rejection_reason
+                status
             FROM cheque_transaction
-            WHERE status = $P{P_STATUS}
+            WHERE cheque_amount >= 200000
+            ORDER BY cheque_amount DESC
         ]]>
     </query>
 
-    <field
-        name="cheque_number"
-        class="java.lang.String"/>
 
-    <field
-        name="customer_name"
-        class="java.lang.String"/>
+    <!-- ========================= -->
+    <!-- FIELDS                    -->
+    <!-- ========================= -->
 
-    <field
-        name="account_number"
-        class="java.lang.String"/>
+    <field name="cheque_number" class="java.lang.String"/>
 
-    <field
-        name="cheque_amount"
-        class="java.math.BigDecimal"/>
+    <field name="customer_name" class="java.lang.String"/>
 
-    <field
-        name="rejection_reason"
-        class="java.lang.String"/>
+    <field name="bank_name" class="java.lang.String"/>
 
-    <title height="50">
+    <field name="cheque_amount" class="java.math.BigDecimal"/>
+
+    <field name="status" class="java.lang.String"/>
+
+
+    <!-- ========================= -->
+    <!-- VARIABLES                 -->
+    <!-- ========================= -->
+
+    <variable
+        name="TOTAL_HIGH_VALUE_CHEQUES"
+        class="java.lang.Integer"
+        calculation="Count">
+
+        <expression>
+            $F{cheque_number}
+        </expression>
+
+    </variable>
+
+
+    <variable
+        name="TOTAL_HIGH_VALUE_AMOUNT"
+        class="java.math.BigDecimal"
+        calculation="Sum">
+
+        <expression>
+            $F{cheque_amount}
+        </expression>
+
+    </variable>
+
+
+    <!-- ========================= -->
+    <!-- TITLE                     -->
+    <!-- ========================= -->
+
+    <title height="60">
 
         <element
             kind="staticText"
             x="0"
             y="10"
-            width="555"
-            height="30">
+            width="515"
+            height="40">
 
-            <text><![CDATA[REJECTED CHEQUE REPORT]]></text>
+            <text><![CDATA[CTS - HIGH VALUE CHEQUE REPORT]]></text>
+
+            <property
+                name="com.jaspersoft.studio.unit.height"
+                value="px"/>
 
         </element>
 
     </title>
 
-    <columnHeader height="30">
+
+    <!-- ========================= -->
+    <!-- COLUMN HEADER             -->
+    <!-- ========================= -->
+
+    <columnHeader height="35">
+
+        <!-- Cheque Number -->
 
         <element
             kind="staticText"
             x="0"
-            width="100"
-            height="30">
+            y="0"
+            width="90"
+            height="35">
 
             <text><![CDATA[Cheque No]]></text>
 
+            <box>
+                <pen lineWidth="1.0"/>
+            </box>
+
         </element>
+
+
+        <!-- Customer -->
 
         <element
             kind="staticText"
-            x="100"
-            width="110"
-            height="30">
+            x="90"
+            y="0"
+            width="130"
+            height="35">
 
             <text><![CDATA[Customer]]></text>
 
-        </element>
-
-        <element
-            kind="staticText"
-            x="210"
-            width="95"
-            height="30">
-
-            <text><![CDATA[Account]]></text>
+            <box>
+                <pen lineWidth="1.0"/>
+            </box>
 
         </element>
 
+
+        <!-- Bank -->
+
         <element
             kind="staticText"
-            x="305"
-            width="90"
-            height="30">
+            x="220"
+            y="0"
+            width="120"
+            height="35">
+
+            <text><![CDATA[Bank]]></text>
+
+            <box>
+                <pen lineWidth="1.0"/>
+            </box>
+
+        </element>
+
+
+        <!-- Amount -->
+
+        <element
+            kind="staticText"
+            x="340"
+            y="0"
+            width="100"
+            height="35">
 
             <text><![CDATA[Amount]]></text>
 
+            <box>
+                <pen lineWidth="1.0"/>
+            </box>
+
         </element>
+
+
+        <!-- Status -->
 
         <element
             kind="staticText"
-            x="395"
-            width="160"
-            height="30">
+            x="440"
+            y="0"
+            width="75"
+            height="35">
 
-            <text><![CDATA[Rejection Reason]]></text>
+            <text><![CDATA[Status]]></text>
+
+            <box>
+                <pen lineWidth="1.0"/>
+            </box>
 
         </element>
 
     </columnHeader>
 
+
+    <!-- ========================= -->
+    <!-- DETAIL                    -->
+    <!-- ========================= -->
+
     <detail>
 
         <band height="30">
 
+
+            <!-- Cheque Number -->
+
             <element
                 kind="textField"
                 x="0"
-                width="100"
-                height="30">
-
-                <expression>
-                    <![CDATA[$F{cheque_number}]]>
-                </expression>
-
-            </element>
-
-            <element
-                kind="textField"
-                x="100"
-                width="110"
-                height="30">
-
-                <expression>
-                    <![CDATA[$F{customer_name}]]>
-                </expression>
-
-            </element>
-
-            <element
-                kind="textField"
-                x="210"
-                width="95"
-                height="30">
-
-                <expression>
-                    <![CDATA[$F{account_number}]]>
-                </expression>
-
-            </element>
-
-            <element
-                kind="textField"
-                x="305"
+                y="0"
                 width="90"
+                height="30">
+
+                <expression>
+                    $F{cheque_number}
+                </expression>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+            </element>
+
+
+            <!-- Customer -->
+
+            <element
+                kind="textField"
+                x="90"
+                y="0"
+                width="130"
+                height="30">
+
+                <expression>
+                    $F{customer_name}
+                </expression>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+            </element>
+
+
+            <!-- Bank -->
+
+            <element
+                kind="textField"
+                x="220"
+                y="0"
+                width="120"
+                height="30">
+
+                <expression>
+                    $F{bank_name}
+                </expression>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+            </element>
+
+
+            <!-- Amount -->
+
+            <element
+                kind="textField"
+                x="340"
+                y="0"
+                width="100"
                 height="30"
                 pattern="#,##0.00">
 
                 <expression>
-                    <![CDATA[$F{cheque_amount}]]>
+                    $F{cheque_amount}
                 </expression>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
 
             </element>
 
+
+            <!-- Status -->
+
             <element
                 kind="textField"
-                x="395"
-                width="160"
+                x="440"
+                y="0"
+                width="75"
                 height="30">
 
                 <expression>
-                    <![CDATA[$F{rejection_reason}]]>
+                    $F{status}
                 </expression>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
 
             </element>
 
         </band>
 
     </detail>
+
+
+    <!-- ========================= -->
+    <!-- SUMMARY                   -->
+    <!-- ========================= -->
+
+    <summary height="80">
+
+
+        <!-- Total Count Label -->
+
+        <element
+            kind="staticText"
+            x="0"
+            y="10"
+            width="220"
+            height="25">
+
+            <text><![CDATA[Total High Value Cheques:]]></text>
+
+        </element>
+
+
+        <!-- Total Count -->
+
+        <element
+            kind="textField"
+            x="220"
+            y="10"
+            width="100"
+            height="25">
+
+            <expression>
+                $V{TOTAL_HIGH_VALUE_CHEQUES}
+            </expression>
+
+        </element>
+
+
+        <!-- Total Amount Label -->
+
+        <element
+            kind="staticText"
+            x="0"
+            y="45"
+            width="220"
+            height="25">
+
+            <text><![CDATA[Total High Value Amount:]]></text>
+
+        </element>
+
+
+        <!-- Total Amount -->
+
+        <element
+            kind="textField"
+            x="220"
+            y="45"
+            width="150"
+            height="25"
+            pattern="#,##0.00">
+
+            <expression>
+                $V{TOTAL_HIGH_VALUE_AMOUNT}
+            </expression>
+
+        </element>
+
+    </summary>
 
 </jasperReport>
