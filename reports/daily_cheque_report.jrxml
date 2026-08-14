@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jasperReport
+        name="daily_cheque_report"
+        language="java"
+        pageWidth="595"
+        pageHeight="842"
+        columnWidth="555"
+        leftMargin="20"
+        rightMargin="20"
+        topMargin="20"
+        bottomMargin="20"
+        uuid="8c2e6c91-2c0b-4c5c-9f7c-1a2b3d4e5f60">
+
+    <!-- ===================================================== -->
+    <!-- SQL QUERY                                             -->
+    <!-- ===================================================== -->
+
+    <query language="sql">
+        <![CDATA[
+            SELECT cheque_number,
+                   customer_name,
+                   bank_name,
+                   cheque_amount,
+                   batch_id,
+                   status
+            FROM cheque_transaction
+            WHERE processing_date = '2026-08-13'
+        ]]>
+    </query>
+
+
+    <!-- ===================================================== -->
+    <!-- FIELDS                                                -->
+    <!-- ===================================================== -->
+
+    <field name="cheque_number" class="java.lang.String"/>
+    <field name="customer_name" class="java.lang.String"/>
+    <field name="bank_name" class="java.lang.String"/>
+    <field name="cheque_amount" class="java.math.BigDecimal"/>
+    <field name="batch_id" class="java.lang.String"/>
+    <field name="status" class="java.lang.String"/>
+
+
+    <!-- ===================================================== -->
+    <!-- TITLE                                                 -->
+    <!-- ===================================================== -->
+
+    <title height="50">
+
+        <element
+                kind="staticText"
+                x="0"
+                y="10"
+                width="555"
+                height="30"
+                hTextAlign="Center"
+                vTextAlign="Middle"
+                fontSize="18.0"
+                bold="true"
+                uuid="11111111-1111-1111-1111-111111111111">
+
+            <text><![CDATA[DAILY CHEQUE PROCESSING REPORT]]></text>
+
+        </element>
+
+    </title>
+
+
+    <!-- ===================================================== -->
+    <!-- COLUMN HEADER                                         -->
+    <!-- ===================================================== -->
+
+    <columnHeader height="30">
+
+        <!-- Cheque No -->
+
+        <element
+                kind="staticText"
+                x="0"
+                y="0"
+                width="80"
+                height="30"
+                hTextAlign="Center"
+                vTextAlign="Middle"
+                bold="true"
+                uuid="11111111-1111-1111-1111-111111111112">
+
+            <text><![CDATA[Cheque No]]></text>
+
+        </element>
+
+
+        <!-- Customer -->
+
+        <element
+                kind="staticText"
+                x="80"
+                y="0"
+                width="100"
+                height="30"
+                hTextAlign="Center"
+                vTextAlign="Middle"
+                bold="true"
+                uuid="11111111-1111-1111-1111-111111111113">
+
+            <text><![CDATA[Customer]]></text>
+
+        </element>
+
+
+        <!-- Bank -->
+
+        <element
+                kind="staticText"
+                x="180"
+                y="0"
+                width="100"
+                height="30"
+                hTextAlign="Center"
+                vTextAlign="Middle"
+                bold="true"
+                uuid="11111111-1111-1111-1111-111111111114">
+
+            <text><![CDATA[Bank]]></text>
+
+        </element>
+
+
+        <!-- Amount -->
+
+        <element
+                kind="staticText"
+                x="280"
+                y="0"
+                width="90"
+                height="30"
+                hTextAlign="Center"
+                vTextAlign="Middle"
+                bold="true"
+                uuid="11111111-1111-1111-1111-111111111115">
+
+            <text><![CDATA[Amount]]></text>
+
+        </element>
+
+
+        <!-- Batch -->
+
+        <element
+                kind="staticText"
+                x="370"
+                y="0"
+                width="85"
+                height="30"
+                hTextAlign="Center"
+                vTextAlign="Middle"
+                bold="true"
+                uuid="11111111-1111-1111-1111-111111111116">
+
+            <text><![CDATA[Batch]]></text>
+
+        </element>
+
+
+        <!-- Status -->
+
+        <element
+                kind="staticText"
+                x="455"
+                y="0"
+                width="100"
+                height="30"
+                hTextAlign="Center"
+                vTextAlign="Middle"
+                bold="true"
+                uuid="11111111-1111-1111-1111-111111111117">
+
+            <text><![CDATA[Status]]></text>
+
+        </element>
+
+    </columnHeader>
+
+
+    <!-- ===================================================== -->
+    <!-- DETAIL                                                -->
+    <!-- ===================================================== -->
+
+    <detail>
+
+        <band height="25">
+
+
+            <!-- Cheque Number -->
+
+            <element
+                    kind="textField"
+                    x="0"
+                    y="0"
+                    width="80"
+                    height="25"
+                    hTextAlign="Center"
+                    vTextAlign="Middle"
+                    uuid="22222222-2222-2222-2222-222222222221">
+
+                <expression><![CDATA[$F{cheque_number}]]></expression>
+
+            </element>
+
+
+            <!-- Customer -->
+
+            <element
+                    kind="textField"
+                    x="80"
+                    y="0"
+                    width="100"
+                    height="25"
+                    vTextAlign="Middle"
+                    uuid="22222222-2222-2222-2222-222222222222">
+
+                <expression><![CDATA[$F{customer_name}]]></expression>
+
+            </element>
+
+
+            <!-- Bank -->
+
+            <element
+                    kind="textField"
+                    x="180"
+                    y="0"
+                    width="100"
+                    height="25"
+                    vTextAlign="Middle"
+                    uuid="22222222-2222-2222-2222-222222222223">
+
+                <expression><![CDATA[$F{bank_name}]]></expression>
+
+            </element>
+
+
+            <!-- Amount -->
+
+            <element
+                    kind="textField"
+                    x="280"
+                    y="0"
+                    width="90"
+                    height="25"
+                    hTextAlign="Right"
+                    vTextAlign="Middle"
+                    pattern="#,##0.00"
+                    uuid="22222222-2222-2222-2222-222222222224">
+
+                <expression><![CDATA[$F{cheque_amount}]]></expression>
+
+            </element>
+
+
+            <!-- Batch -->
+
+            <element
+                    kind="textField"
+                    x="370"
+                    y="0"
+                    width="85"
+                    height="25"
+                    hTextAlign="Center"
+                    vTextAlign="Middle"
+                    uuid="22222222-2222-2222-2222-222222222225">
+
+                <expression><![CDATA[$F{batch_id}]]></expression>
+
+            </element>
+
+
+            <!-- Status -->
+
+            <element
+                    kind="textField"
+                    x="455"
+                    y="0"
+                    width="100"
+                    height="25"
+                    hTextAlign="Center"
+                    vTextAlign="Middle"
+                    uuid="22222222-2222-2222-2222-222222222226">
+
+                <expression><![CDATA[$F{status}]]></expression>
+
+            </element>
+
+        </band>
+
+    </detail>
+
+
+    <!-- ===================================================== -->
+    <!-- REPORT FOOTER / TOTAL                                -->
+    <!-- ===================================================== -->
+
+    <summary height="45">
+
+        <element
+                kind="staticText"
+                x="280"
+                y="5"
+                width="180"
+                height="30"
+                hTextAlign="Right"
+                vTextAlign="Middle"
+                bold="true"
+                uuid="33333333-3333-3333-3333-333333333331">
+
+            <text><![CDATA[Total Cheques Processed:]]></text>
+
+        </element>
+
+
+        <element
+                kind="textField"
+                x="460"
+                y="5"
+                width="95"
+                height="30"
+                hTextAlign="Center"
+                vTextAlign="Middle"
+                bold="true"
+                uuid="33333333-3333-3333-3333-333333333332">
+
+            <expression><![CDATA[$V{REPORT_COUNT}]]></expression>
+
+        </element>
+
+    </summary>
+
+</jasperReport>

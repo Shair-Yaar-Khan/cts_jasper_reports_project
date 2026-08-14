@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jasperReport
+    name="batch_summary_report"
+    language="java"
+    pageWidth="595"
+    pageHeight="842"
+    columnWidth="555"
+    leftMargin="20"
+    rightMargin="20"
+    topMargin="20"
+    bottomMargin="20">
+
+    <!-- ================================================= -->
+    <!-- SQL QUERY                                         -->
+    <!-- ================================================= -->
+
+    <query language="SQL">
+        <![CDATA[
+            SELECT
+                batch_id,
+                COUNT(*) AS total_cheques,
+                SUM(cheque_amount) AS total_amount
+            FROM cheque_transaction
+            GROUP BY batch_id
+            ORDER BY batch_id
+        ]]>
+    </query>
+
+
+    <!-- ================================================= -->
+    <!-- FIELDS                                            -->
+    <!-- ================================================= -->
+
+    <field
+        name="batch_id"
+        class="java.lang.String"/>
+
+    <field
+        name="total_cheques"
+        class="java.lang.Long"/>
+
+    <field
+        name="total_amount"
+        class="java.lang.Double"/>
+
+
+    <!-- ================================================= -->
+    <!-- VARIABLES                                         -->
+    <!-- ================================================= -->
+
+    <variable
+        name="TotalBatches"
+        class="java.lang.Integer"
+        calculation="Count">
+
+        <expression>
+            <![CDATA[$F{batch_id}]]>
+        </expression>
+
+    </variable>
+
+
+    <variable
+        name="TotalCheques"
+        class="java.lang.Long"
+        calculation="Sum">
+
+        <expression>
+            <![CDATA[$F{total_cheques}]]>
+        </expression>
+
+    </variable>
+
+
+    <variable
+        name="OverallAmount"
+        class="java.lang.Double"
+        calculation="Sum">
+
+        <expression>
+            <![CDATA[$F{total_amount}]]>
+        </expression>
+
+    </variable>
+
+
+    <!-- ================================================= -->
+    <!-- TITLE                                             -->
+    <!-- ================================================= -->
+
+    <title height="60">
+
+        <element
+            kind="staticText"
+            x="0"
+            y="10"
+            width="555"
+            height="30"
+            hTextAlign="Center"
+            fontSize="18.0"
+            bold="true">
+
+            <text><![CDATA[BATCH PROCESSING SUMMARY]]></text>
+
+        </element>
+
+    </title>
+
+
+    <!-- ================================================= -->
+    <!-- COLUMN HEADER                                     -->
+    <!-- ================================================= -->
+
+    <columnHeader height="35">
+
+        <element
+            kind="staticText"
+            x="0"
+            y="0"
+            width="185"
+            height="30"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[Batch ID]]></text>
+
+        </element>
+
+
+        <element
+            kind="staticText"
+            x="185"
+            y="0"
+            width="185"
+            height="30"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[Total Cheques]]></text>
+
+        </element>
+
+
+        <element
+            kind="staticText"
+            x="370"
+            y="0"
+            width="185"
+            height="30"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[Total Amount]]></text>
+
+        </element>
+
+    </columnHeader>
+
+
+    <!-- ================================================= -->
+    <!-- DETAIL                                            -->
+    <!-- ================================================= -->
+
+    <detail>
+
+        <band height="30">
+
+            <element
+                kind="textField"
+                x="0"
+                y="0"
+                width="185"
+                height="25"
+                hTextAlign="Center">
+
+                <expression>
+                    <![CDATA[$F{batch_id}]]>
+                </expression>
+
+            </element>
+
+
+            <element
+                kind="textField"
+                x="185"
+                y="0"
+                width="185"
+                height="25"
+                hTextAlign="Center">
+
+                <expression>
+                    <![CDATA[$F{total_cheques}]]>
+                </expression>
+
+            </element>
+
+
+            <element
+                kind="textField"
+                x="370"
+                y="0"
+                width="185"
+                height="25"
+                hTextAlign="Right">
+
+                <expression>
+                    <![CDATA[$F{total_amount}]]>
+                </expression>
+
+                <patternExpression>
+                    <![CDATA["#,##0.00"]]>
+                </patternExpression>
+
+            </element>
+
+        </band>
+
+    </detail>
+
+
+    <!-- ================================================= -->
+    <!-- SUMMARY                                           -->
+    <!-- ================================================= -->
+
+    <summary height="100">
+
+        <element
+            kind="staticText"
+            x="0"
+            y="10"
+            width="200"
+            height="20"
+            bold="true">
+
+            <text><![CDATA[Total Batches:]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="200"
+            y="10"
+            width="100"
+            height="20">
+
+            <expression>
+                <![CDATA[$V{TotalBatches}]]>
+            </expression>
+
+        </element>
+
+
+        <element
+            kind="staticText"
+            x="0"
+            y="35"
+            width="200"
+            height="20"
+            bold="true">
+
+            <text><![CDATA[Total Cheques:]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="200"
+            y="35"
+            width="100"
+            height="20">
+
+            <expression>
+                <![CDATA[$V{TotalCheques}]]>
+            </expression>
+
+        </element>
+
+
+        <element
+            kind="staticText"
+            x="0"
+            y="60"
+            width="200"
+            height="20"
+            bold="true">
+
+            <text><![CDATA[Overall Amount:]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="200"
+            y="60"
+            width="150"
+            height="20"
+            hTextAlign="Right">
+
+            <expression>
+                <![CDATA[$V{OverallAmount}]]>
+            </expression>
+
+            <patternExpression>
+                <![CDATA["#,##0.00"]]>
+            </patternExpression>
+
+        </element>
+
+    </summary>
+
+
+    <!-- ================================================= -->
+    <!-- PAGE FOOTER                                       -->
+    <!-- ================================================= -->
+
+    <pageFooter height="30">
+
+        <element
+            kind="textField"
+            x="430"
+            y="5"
+            width="125"
+            height="20"
+            hTextAlign="Right">
+
+            <expression>
+                <![CDATA["Page " + $V{PAGE_NUMBER}]]>
+            </expression>
+
+        </element>
+
+    </pageFooter>
+
+
+</jasperReport>
