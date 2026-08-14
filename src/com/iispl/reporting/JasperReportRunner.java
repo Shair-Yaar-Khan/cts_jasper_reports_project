@@ -1,5 +1,7 @@
 package com.iispl.reporting;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,27 +14,54 @@ import net.sf.jasperreports.engine.JasperReport;
 
 public class JasperReportRunner {
 
-    public void generateHighValueChequeReport() throws Exception {
+	
+	
+	public void generateRejectedChequeReport() throws Exception{
 
-        JasperReport report = JasperCompileManager.compileReport(
-                "reports/high_value_report.jrxml"
-        );
+        try {
+            Connection connection =
+                    DBConnection.getConnection();
 
-        Map<String, Object> parameters = new HashMap<>();
+          
+            InputStream reportStream =
+                    new FileInputStream(
+                            "reports/rejected_cheque_report.jrxml");
 
-        Connection connection = DBConnection.getConnection();
+            JasperReport jasperReport =
+                    JasperCompileManager.compileReport(
+                            reportStream);
+            Map<String, Object> parameters =
+                    new HashMap<>();
 
-        JasperPrint print = JasperFillManager.fillReport(
-                report,
-                parameters,
-                connection
-        );
+          
+            parameters.put(
+                    "P_STATUS",
+                    "REJECTED" );
 
-        JasperExportManager.exportReportToPdfFile(
-                print,
-                "output/high_value_report.pdf"
-        );
+          
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(
+                            jasperReport,
+                            parameters,
+                            connection );
 
-        connection.close();
+            JasperExportManager.exportReportToPdfFile(
+                    jasperPrint,
+                    "output/rejected_cheque_report.pdf");
+
+           
+            reportStream.close();
+            connection.close();
+
+            System.out.println(
+                    "Report generated successfully!");
+
+        } 
+        catch (Exception e) {
+
+            System.out.println(e.getMessage());
+        }
     }
+	
+	
 }
