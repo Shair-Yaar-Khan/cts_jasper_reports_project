@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jasperReport
+    name="cts_daily_operations_dashboard"
+    language="java"
+    pageWidth="595"
+    pageHeight="842"
+    columnWidth="555"
+    leftMargin="20"
+    rightMargin="20"
+    topMargin="20"
+    bottomMargin="20">
+
+    <!-- ================================================= -->
+    <!-- DASHBOARD QUERY                                  -->
+    <!-- ================================================= -->
+
+    <query language="SQL">
+        <![CDATA[
+            SELECT
+                bank_name,
+                COUNT(*) AS total_cheques,
+
+                SUM(
+                    CASE
+                        WHEN status = 'APPROVED'
+                        THEN 1
+                        ELSE 0
+                    END
+                ) AS approved_cheques,
+
+                SUM(
+                    CASE
+                        WHEN status = 'REJECTED'
+                        THEN 1
+                        ELSE 0
+                    END
+                ) AS rejected_cheques,
+
+                SUM(
+                    CASE
+                        WHEN micr_status = 'INVALID'
+                        THEN 1
+                        ELSE 0
+                    END
+                ) AS micr_repair_pending,
+
+                SUM(
+                    CASE
+                        WHEN cheque_amount >= 200000
+                        THEN 1
+                        ELSE 0
+                    END
+                ) AS high_value_cheques,
+
+                SUM(cheque_amount) AS total_processing_amount,
+
+                MAX(processing_date) AS processing_date
+
+            FROM cheque_transaction
+
+            GROUP BY bank_name
+
+            ORDER BY bank_name
+        ]]>
+    </query>
+
+
+    <!-- ================================================= -->
+    <!-- FIELDS                                            -->
+    <!-- ================================================= -->
+
+    <field
+        name="bank_name"
+        class="java.lang.String"/>
+
+    <field
+        name="total_cheques"
+        class="java.lang.Long"/>
+
+    <field
+        name="approved_cheques"
+        class="java.lang.Long"/>
+
+    <field
+        name="rejected_cheques"
+        class="java.lang.Long"/>
+
+    <field
+        name="micr_repair_pending"
+        class="java.lang.Long"/>
+
+    <field
+        name="high_value_cheques"
+        class="java.lang.Long"/>
+
+    <field
+        name="total_processing_amount"
+        class="java.lang.Double"/>
+
+    <field
+        name="processing_date"
+        class="java.sql.Date"/>
+
+
+    <!-- ================================================= -->
+    <!-- VARIABLES                                         -->
+    <!-- ================================================= -->
+
+    <!-- TOTAL CHEQUES -->
+
+    <variable
+        name="TotalCheques"
+        class="java.lang.Long"
+        calculation="Sum">
+
+        <expression>
+            <![CDATA[$F{total_cheques}]]>
+        </expression>
+
+    </variable>
+
+
+    <!-- APPROVED CHEQUES -->
+
+    <variable
+        name="ApprovedCheques"
+        class="java.lang.Long"
+        calculation="Sum">
+
+        <expression>
+            <![CDATA[$F{approved_cheques}]]>
+        </expression>
+
+    </variable>
+
+
+    <!-- REJECTED CHEQUES -->
+
+    <variable
+        name="RejectedCheques"
+        class="java.lang.Long"
+        calculation="Sum">
+
+        <expression>
+            <![CDATA[$F{rejected_cheques}]]>
+        </expression>
+
+    </variable>
+
+
+    <!-- MICR REPAIR PENDING -->
+
+    <variable
+        name="MicrRepairPending"
+        class="java.lang.Long"
+        calculation="Sum">
+
+        <expression>
+            <![CDATA[$F{micr_repair_pending}]]>
+        </expression>
+
+    </variable>
+
+
+    <!-- HIGH VALUE CHEQUES -->
+
+    <variable
+        name="HighValueCheques"
+        class="java.lang.Long"
+        calculation="Sum">
+
+        <expression>
+            <![CDATA[$F{high_value_cheques}]]>
+        </expression>
+
+    </variable>
+
+
+    <!-- TOTAL PROCESSING AMOUNT -->
+
+    <variable
+        name="TotalProcessingAmount"
+        class="java.lang.Double"
+        calculation="Sum">
+
+        <expression>
+            <![CDATA[$F{total_processing_amount}]]>
+        </expression>
+
+    </variable>
+
+
+    <!-- PROCESSING DATE -->
+
+    <variable
+        name="ProcessingDate"
+        class="java.sql.Date"
+        calculation="Highest">
+
+        <expression>
+            <![CDATA[$F{processing_date}]]>
+        </expression>
+
+    </variable>
+
+
+    <!-- ================================================= -->
+    <!-- TITLE                                             -->
+    <!-- ================================================= -->
+
+    <title height="70">
+
+        <element
+            kind="staticText"
+            x="0"
+            y="10"
+            width="555"
+            height="35"
+            hTextAlign="Center"
+            fontSize="20.0"
+            bold="true">
+
+            <text><![CDATA[CTS - Daily Operations Dashboard]]></text>
+
+        </element>
+
+    </title>
+
+
+    <!-- ================================================= -->
+    <!-- DETAIL                                            -->
+    <!-- Kept minimal because dashboard uses variables    -->
+    <!-- ================================================= -->
+
+    <detail>
+
+        <band height="1">
+
+        </band>
+
+    </detail>
+
+
+    <!-- ================================================= -->
+    <!-- SUMMARY / DASHBOARD                              -->
+    <!-- ================================================= -->
+
+    <summary height="600">
+
+
+        <!-- ================================================= -->
+        <!-- PROCESSING DATE                                   -->
+        <!-- ================================================= -->
+
+        <element
+            kind="textField"
+            x="0"
+            y="5"
+            width="555"
+            height="25"
+            hTextAlign="Center"
+            evaluationTime="Report"
+            fontSize="11.0"
+            bold="true">
+
+            <expression>
+                <![CDATA[
+                    "Processing Date : "
+                    + new java.text.SimpleDateFormat("dd-MM-yyyy")
+                        .format($V{ProcessingDate})
+                ]]>
+            </expression>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- KPI 1 - TOTAL CHEQUES                             -->
+        <!-- ================================================= -->
+
+        <element
+            kind="staticText"
+            x="20"
+            y="45"
+            width="165"
+            height="25"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[TOTAL CHEQUES]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="20"
+            y="70"
+            width="165"
+            height="45"
+            hTextAlign="Center"
+            fontSize="20.0"
+            bold="true">
+
+            <expression>
+                <![CDATA[$V{TotalCheques}]]>
+            </expression>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- KPI 2 - APPROVED CHEQUES                          -->
+        <!-- ================================================= -->
+
+        <element
+            kind="staticText"
+            x="195"
+            y="45"
+            width="165"
+            height="25"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[APPROVED CHEQUES]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="195"
+            y="70"
+            width="165"
+            height="45"
+            hTextAlign="Center"
+            fontSize="20.0"
+            bold="true">
+
+            <expression>
+                <![CDATA[$V{ApprovedCheques}]]>
+            </expression>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- KPI 3 - REJECTED CHEQUES                          -->
+        <!-- ================================================= -->
+
+        <element
+            kind="staticText"
+            x="370"
+            y="45"
+            width="165"
+            height="25"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[REJECTED CHEQUES]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="370"
+            y="70"
+            width="165"
+            height="45"
+            hTextAlign="Center"
+            fontSize="20.0"
+            bold="true">
+
+            <expression>
+                <![CDATA[$V{RejectedCheques}]]>
+            </expression>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- KPI 4 - MICR REPAIR PENDING                       -->
+        <!-- ================================================= -->
+
+        <element
+            kind="staticText"
+            x="20"
+            y="135"
+            width="165"
+            height="25"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[MICR REPAIR PENDING]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="20"
+            y="160"
+            width="165"
+            height="45"
+            hTextAlign="Center"
+            fontSize="20.0"
+            bold="true">
+
+            <expression>
+                <![CDATA[$V{MicrRepairPending}]]>
+            </expression>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- KPI 5 - HIGH VALUE CHEQUES                        -->
+        <!-- ================================================= -->
+
+        <element
+            kind="staticText"
+            x="195"
+            y="135"
+            width="165"
+            height="25"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[HIGH VALUE CHEQUES]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="195"
+            y="160"
+            width="165"
+            height="45"
+            hTextAlign="Center"
+            fontSize="20.0"
+            bold="true">
+
+            <expression>
+                <![CDATA[$V{HighValueCheques}]]>
+            </expression>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- KPI 6 - TOTAL PROCESSING AMOUNT                   -->
+        <!-- ================================================= -->
+
+        <element
+            kind="staticText"
+            x="370"
+            y="135"
+            width="165"
+            height="25"
+            hTextAlign="Center"
+            bold="true">
+
+            <text><![CDATA[TOTAL PROCESSING AMOUNT]]></text>
+
+        </element>
+
+
+        <element
+            kind="textField"
+            x="370"
+            y="160"
+            width="165"
+            height="45"
+            hTextAlign="Center"
+            fontSize="16.0"
+            bold="true">
+
+            <expression>
+                <![CDATA[$V{TotalProcessingAmount}]]>
+            </expression>
+
+            <patternExpression>
+                <![CDATA["#,##0.00"]]>
+            </patternExpression>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- CHART HEADING                                     -->
+        <!-- ================================================= -->
+
+        <element
+            kind="staticText"
+            x="0"
+            y="225"
+            width="555"
+            height="25"
+            hTextAlign="Center"
+            fontSize="14.0"
+            bold="true">
+
+            <text><![CDATA[BANK-WISE PROCESSING AMOUNT]]></text>
+
+        </element>
+
+
+        <!-- ================================================= -->
+        <!-- BAR CHART                                         -->
+        <!-- ================================================= -->
+
+        <element
+            kind="chart"
+            chartType="bar"
+            x="25"
+            y="260"
+            width="505"
+            height="300"
+            evaluationTime="Report">
+
+
+          <dataset
+    kind="category"
+    resetType="Report">
+
+    <series>
+
+        <seriesExpression>
+            <![CDATA["Processing Amount"]]>
+        </seriesExpression>
+
+        <categoryExpression>
+            <![CDATA[$F{bank_name}]]>
+        </categoryExpression>
+
+        <valueExpression>
+            <![CDATA[$F{total_processing_amount}]]>
+        </valueExpression>
+
+    </series>
+
+</dataset>
+
+
+            <plot>
+
+            </plot>
+
+
+        </element>
+
+
+    </summary>
+
+
+    <!-- ================================================= -->
+    <!-- PAGE FOOTER                                       -->
+    <!-- ================================================= -->
+
+    <pageFooter height="30">
+
+        <element
+            kind="textField"
+            x="430"
+            y="5"
+            width="125"
+            height="20"
+            hTextAlign="Right">
+
+            <expression>
+                <![CDATA["Page " + $V{PAGE_NUMBER}]]>
+            </expression>
+
+        </element>
+
+    </pageFooter>
+
+
+</jasperReport>

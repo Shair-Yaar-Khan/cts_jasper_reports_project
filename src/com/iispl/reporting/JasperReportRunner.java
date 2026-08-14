@@ -2,15 +2,14 @@ package com.iispl.reporting;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -22,23 +21,15 @@ public class JasperReportRunner {
 	public void generateHighValueChequeReport() throws Exception {
 
         JasperReport report = JasperCompileManager.compileReport(
-                "reports/high_value_report.jrxml"
-        );
+                "reports/high_value_report.jrxml");
 
         Map<String, Object> parameters = new HashMap<>();
 
         Connection connection = DBConnection.getConnection();
 
-        JasperPrint print = JasperFillManager.fillReport(
-                report,
-                parameters,
-                connection
-        );
+        JasperPrint print = JasperFillManager.fillReport(report,parameters,connection);
 
-        JasperExportManager.exportReportToPdfFile(
-                print,
-                "output/high_value_report.pdf"
-        );
+        JasperExportManager.exportReportToPdfFile(print,"output/high_value_report.pdf");
         
         System.out.println("High Value Cheque Report generated successfully.");
 
@@ -48,43 +39,26 @@ public class JasperReportRunner {
     {
     	
 
-            Connection connection =
-                    DBConnection.getConnection();
+            Connection connection = DBConnection.getConnection();
 
             System.out.println("Database connected successfully.");
 
-            String jrxmlFile =
-                    "reports/micr_repair_report.jrxml";
+            String jrxmlFile = "reports/micr_repair_report.jrxml";
 
-            JasperReport jasperReport =
-                    JasperCompileManager.compileReport(jrxmlFile);
+            JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile);
 
             System.out.println("JRXML compiled successfully.");
-
-
-         
-
-            JasperPrint jasperPrint =
-                    JasperFillManager.fillReport(
-                            jasperReport,
-                            null,
-                            connection
-                    );
+            
+            JasperPrint jasperPrint =JasperFillManager.fillReport(jasperReport,null,connection);
 
             System.out.println("Report filled successfully.");
 
 
-            String outputFile =
-                    "output/micr_repair_report.pdf";
+            String outputFile = "output/micr_repair_report.pdf";
 
-            JasperExportManager.exportReportToPdfFile(
-                    jasperPrint,
-                    outputFile
-            );
+            JasperExportManager.exportReportToPdfFile(jasperPrint,outputFile);
 
-            System.out.println(
-                    "PDF generated successfully:"
-            );
+            System.out.println("PDF generated successfully:");
 
             System.out.println(outputFile);
 
@@ -103,7 +77,7 @@ public class JasperReportRunner {
 				
 				JasperExportManager.exportReportToPdfFile(jasperPrint, "output/daily_cheque_report.pdf");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}catch(JRException e) {
 				e.printStackTrace();
@@ -146,42 +120,26 @@ public class JasperReportRunner {
 	public void generateRejectedChequeReport() throws Exception{
 
         try {
-            Connection connection =
-                    DBConnection.getConnection();
+            Connection connection = DBConnection.getConnection();
 
           
-            InputStream reportStream =
-                    new FileInputStream(
-                            "reports/rejected_cheque_report.jrxml");
+            InputStream reportStream = new FileInputStream("reports/rejected_cheque_report.jrxml");
 
-            JasperReport jasperReport =
-                    JasperCompileManager.compileReport(
-                            reportStream);
-            Map<String, Object> parameters =
-                    new HashMap<>();
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+            Map<String, Object> parameters = new HashMap<>();
 
           
-            parameters.put(
-                    "P_STATUS",
-                    "REJECTED" );
+            parameters.put("P_STATUS","REJECTED" );
+            
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,parameters,connection );
 
-          
-            JasperPrint jasperPrint =
-                    JasperFillManager.fillReport(
-                            jasperReport,
-                            parameters,
-                            connection );
-
-            JasperExportManager.exportReportToPdfFile(
-                    jasperPrint,
-                    "output/rejected_cheque_report.pdf");
+            JasperExportManager.exportReportToPdfFile(jasperPrint,"output/rejected_cheque_report.pdf");
 
            
             reportStream.close();
             connection.close();
 
-            System.out.println(
-                    " Rejected Report generated successfully!");
+            System.out.println(" Rejected Report generated successfully!");
 
         } 
         catch (Exception e) {
@@ -189,5 +147,35 @@ public class JasperReportRunner {
             System.out.println(e.getMessage());
         }
     }
+	
+	  public static void generateDashboardReport() throws Exception {
+
+	        String inputFile = "reports/cts_daily_operations_dashboard.jrxml";
+
+	        String outputFile = "output/CTS_Daily_Operations_Dashboard.pdf";
+
+	        System.out.println("Compiling dashboard JRXML...");
+
+	        JasperReport jasperReport = JasperCompileManager.compileReport(inputFile);
+
+	        System.out.println("JRXML compiled successfully.");
+
+	        Files.createDirectories(Paths.get("output"));
+
+	        try (Connection connection = DBConnection.getConnection()) {
+
+	            System.out.println("Filling dashboard report...");
+
+	            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,connection);
+
+	            System.out.println("Dashboard filled successfully.");
+
+	            JasperExportManager.exportReportToPdfFile(jasperPrint,outputFile);
+
+	            System.out.println("Dashboard PDF generated successfully.");
+
+	            System.out.println("Output : " + outputFile);
+	        }
+	    }
 }
 
