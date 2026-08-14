@@ -17,6 +17,7 @@ public static void main(String[] args) {
 		runner.generateDailyChequeReport();
 		runner.generateBatchSummaryReport();
 		runner.generateBankSummaryReport();
+		runner.generateRejectedChequeReport();
 	}catch(Exception e) {
 		e.printStackTrace();
 	}

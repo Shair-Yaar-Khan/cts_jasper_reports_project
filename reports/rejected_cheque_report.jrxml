@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jasperReport
+    name="RejectedChequeReport"
+    language="java"
+    pageWidth="595"
+    pageHeight="842"
+    columnWidth="555"
+    leftMargin="20"
+    rightMargin="20"
+    topMargin="20"
+    bottomMargin="20">
+
+
+    <!-- ========================= -->
+    <!-- PARAMETER                 -->
+    <!-- ========================= -->
+
+    <parameter
+        name="P_STATUS"
+        class="java.lang.String"/>
+
+
+    <!-- ========================= -->
+    <!-- SQL QUERY                 -->
+    <!-- ========================= -->
+
+    <query language="sql"><![CDATA[
+        SELECT
+            cheque_number,
+            customer_name,
+            account_number,
+            cheque_amount,
+            rejection_reason
+        FROM cheque_transaction
+        WHERE status = $P{P_STATUS}
+    ]]></query>
+
+
+    <!-- ========================= -->
+    <!-- FIELDS                    -->
+    <!-- ========================= -->
+
+    <field
+        name="cheque_number"
+        class="java.lang.String"/>
+
+    <field
+        name="customer_name"
+        class="java.lang.String"/>
+
+    <field
+        name="account_number"
+        class="java.lang.String"/>
+
+    <field
+        name="cheque_amount"
+        class="java.math.BigDecimal"/>
+
+    <field
+        name="rejection_reason"
+        class="java.lang.String"/>
+
+
+    <!-- ========================= -->
+    <!-- TITLE                     -->
+    <!-- ========================= -->
+
+    <title height="60">
+
+        <element
+            kind="staticText"
+            x="0"
+            y="10"
+            width="555"
+            height="35"
+            fontSize="20.0"
+            bold="true"
+            hTextAlign="Center"
+            vTextAlign="Middle">
+
+            <text><![CDATA[REJECTED CHEQUE REPORT]]></text>
+
+        </element>
+
+    </title>
+
+
+    <!-- ========================= -->
+    <!-- COLUMN HEADER             -->
+    <!-- ========================= -->
+
+    <columnHeader height="35">
+
+
+        <!-- CHEQUE NO -->
+
+        <element
+            kind="staticText"
+            x="0"
+            y="0"
+            width="95"
+            height="35"
+            bold="true"
+            hTextAlign="Center"
+            vTextAlign="Middle">
+
+            <text><![CDATA[Cheque No]]></text>
+
+            <box>
+                <pen lineWidth="0.5"/>
+                <topPen lineWidth="0.5"/>
+                <leftPen lineWidth="0.5"/>
+                <bottomPen lineWidth="0.5"/>
+                <rightPen lineWidth="0.5"/>
+            </box>
+
+        </element>
+
+
+        <!-- CUSTOMER -->
+
+        <element
+            kind="staticText"
+            x="95"
+            y="0"
+            width="115"
+            height="35"
+            bold="true"
+            hTextAlign="Center"
+            vTextAlign="Middle">
+
+            <text><![CDATA[Customer]]></text>
+
+            <box>
+                <pen lineWidth="0.5"/>
+                <topPen lineWidth="0.5"/>
+                <leftPen lineWidth="0.5"/>
+                <bottomPen lineWidth="0.5"/>
+                <rightPen lineWidth="0.5"/>
+            </box>
+
+        </element>
+
+
+        <!-- ACCOUNT -->
+
+        <element
+            kind="staticText"
+            x="210"
+            y="0"
+            width="100"
+            height="35"
+            bold="true"
+            hTextAlign="Center"
+            vTextAlign="Middle">
+
+            <text><![CDATA[Account]]></text>
+
+            <box>
+                <pen lineWidth="0.5"/>
+                <topPen lineWidth="0.5"/>
+                <leftPen lineWidth="0.5"/>
+                <bottomPen lineWidth="0.5"/>
+                <rightPen lineWidth="0.5"/>
+            </box>
+
+        </element>
+
+
+        <!-- AMOUNT -->
+
+        <element
+            kind="staticText"
+            x="310"
+            y="0"
+            width="100"
+            height="35"
+            bold="true"
+            hTextAlign="Center"
+            vTextAlign="Middle">
+
+            <text><![CDATA[Amount]]></text>
+
+            <box>
+                <pen lineWidth="0.5"/>
+                <topPen lineWidth="0.5"/>
+                <leftPen lineWidth="0.5"/>
+                <bottomPen lineWidth="0.5"/>
+                <rightPen lineWidth="0.5"/>
+            </box>
+
+        </element>
+
+
+        <!-- REJECTION REASON -->
+
+        <element
+            kind="staticText"
+            x="410"
+            y="0"
+            width="145"
+            height="35"
+            bold="true"
+            hTextAlign="Center"
+            vTextAlign="Middle">
+
+            <text><![CDATA[Rejection Reason]]></text>
+
+            <box>
+                <pen lineWidth="0.5"/>
+                <topPen lineWidth="0.5"/>
+                <leftPen lineWidth="0.5"/>
+                <bottomPen lineWidth="0.5"/>
+                <rightPen lineWidth="0.5"/>
+            </box>
+
+        </element>
+
+    </columnHeader>
+
+
+    <!-- ========================= -->
+    <!-- DETAIL                    -->
+    <!-- ========================= -->
+
+    <detail>
+
+        <band height="32">
+
+
+            <!-- CHEQUE NUMBER -->
+
+            <element
+                kind="textField"
+                x="0"
+                y="0"
+                width="95"
+                height="32"
+                hTextAlign="Center"
+                vTextAlign="Middle">
+
+                <expression><![CDATA[$F{cheque_number}]]></expression>
+
+                <box
+                    leftPadding="5"
+                    rightPadding="5">
+
+                    <pen lineWidth="0.5"/>
+                    <topPen lineWidth="0.5"/>
+                    <leftPen lineWidth="0.5"/>
+                    <bottomPen lineWidth="0.5"/>
+                    <rightPen lineWidth="0.5"/>
+
+                </box>
+
+            </element>
+
+
+            <!-- CUSTOMER -->
+
+            <element
+                kind="textField"
+                x="95"
+                y="0"
+                width="115"
+                height="32"
+                vTextAlign="Middle">
+
+                <expression><![CDATA[$F{customer_name}]]></expression>
+
+                <box
+                    leftPadding="5"
+                    rightPadding="5">
+
+                    <pen lineWidth="0.5"/>
+                    <topPen lineWidth="0.5"/>
+                    <leftPen lineWidth="0.5"/>
+                    <bottomPen lineWidth="0.5"/>
+                    <rightPen lineWidth="0.5"/>
+
+                </box>
+
+            </element>
+
+
+            <!-- ACCOUNT -->
+
+            <element
+                kind="textField"
+                x="210"
+                y="0"
+                width="100"
+                height="32"
+                hTextAlign="Center"
+                vTextAlign="Middle">
+
+                <expression><![CDATA[$F{account_number}]]></expression>
+
+                <box
+                    leftPadding="5"
+                    rightPadding="5">
+
+                    <pen lineWidth="0.5"/>
+                    <topPen lineWidth="0.5"/>
+                    <leftPen lineWidth="0.5"/>
+                    <bottomPen lineWidth="0.5"/>
+                    <rightPen lineWidth="0.5"/>
+
+                </box>
+
+            </element>
+
+
+            <!-- AMOUNT -->
+
+            <element
+                kind="textField"
+                x="310"
+                y="0"
+                width="100"
+                height="32"
+                pattern="#,##0.00"
+                hTextAlign="Right"
+                vTextAlign="Middle">
+
+                <expression><![CDATA[$F{cheque_amount}]]></expression>
+
+                <box
+                    leftPadding="5"
+                    rightPadding="8">
+
+                    <pen lineWidth="0.5"/>
+                    <topPen lineWidth="0.5"/>
+                    <leftPen lineWidth="0.5"/>
+                    <bottomPen lineWidth="0.5"/>
+                    <rightPen lineWidth="0.5"/>
+
+                </box>
+
+            </element>
+
+
+            <!-- REJECTION REASON -->
+
+            <element
+                kind="textField"
+                x="410"
+                y="0"
+                width="145"
+                height="32"
+                blankWhenNull="true"
+                vTextAlign="Middle">
+
+                <expression><![CDATA[$F{rejection_reason}]]></expression>
+
+                <box
+                    leftPadding="5"
+                    rightPadding="5">
+
+                    <pen lineWidth="0.5"/>
+                    <topPen lineWidth="0.5"/>
+                    <leftPen lineWidth="0.5"/>
+                    <bottomPen lineWidth="0.5"/>
+                    <rightPen lineWidth="0.5"/>
+
+                </box>
+
+            </element>
+
+
+        </band>
+
+    </detail>
+
+
+    <!-- ========================= -->
+    <!-- PAGE FOOTER               -->
+    <!-- ========================= -->
+
+    <pageFooter height="25">
+
+        <element
+            kind="textField"
+            x="455"
+            y="0"
+            width="100"
+            height="20"
+            hTextAlign="Right">
+
+            <expression><![CDATA["Page " + $V{PAGE_NUMBER}]]></expression>
+
+        </element>
+
+    </pageFooter>
+
+
+</jasperReport>
