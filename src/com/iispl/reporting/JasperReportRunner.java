@@ -181,7 +181,7 @@ public class JasperReportRunner {
             connection.close();
 
             System.out.println(
-                    "Report generated successfully!");
+                    " Rejected Report generated successfully!");
 
         } 
         catch (Exception e) {
