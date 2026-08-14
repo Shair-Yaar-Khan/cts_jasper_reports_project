@@ -358,7 +358,7 @@
 
     <pattern><![CDATA[#,##0.00]]></pattern>
 
-</element>
+	</element>
 
 
             <!-- STATUS -->
