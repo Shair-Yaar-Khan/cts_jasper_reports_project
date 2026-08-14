@@ -1,11 +1,14 @@
 package com.iispl.reporting;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -38,6 +41,52 @@ public class JasperReportRunner {
 
         connection.close();
     }
+    public void micrRepairReport() throws SQLException, JRException
+    {
+    	
+
+            Connection connection =
+                    DBConnection.getConnection();
+
+            System.out.println("Database connected successfully.");
+
+            String jrxmlFile =
+                    "reports/micr_repair_report.jrxml";
+
+            JasperReport jasperReport =
+                    JasperCompileManager.compileReport(jrxmlFile);
+
+            System.out.println("JRXML compiled successfully.");
+
+
+         
+
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(
+                            jasperReport,
+                            null,
+                            connection
+                    );
+
+            System.out.println("Report filled successfully.");
+
+
+            String outputFile =
+                    "output/micr_repair_report.pdf";
+
+            JasperExportManager.exportReportToPdfFile(
+                    jasperPrint,
+                    outputFile
+            );
+
+            System.out.println(
+                    "PDF generated successfully:"
+            );
+
+            System.out.println(outputFile);
+
+    }
+}
 
 	public void generateDailyChequeReport() {
 		Connection connection = null;

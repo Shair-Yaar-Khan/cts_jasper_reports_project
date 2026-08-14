@@ -12,6 +12,7 @@ public static void main(String[] args) {
 	JasperReportRunner runner = new JasperReportRunner();
 	
 	try {
+    runner.micrRepairReport();
 		runner.generateHighValueChequeReport();
 		runner.generateDailyChequeReport();
 		runner.generateBatchSummaryReport();
